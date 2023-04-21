@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:minor/AdminHomePage.dart';
+import 'package:minor/services/auth_service.dart';
 class adminlogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,26 +36,26 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login() {
-    if (_usernameController.text == 'admin' &&
-        _passwordController.text == 'admin') {
-      Navigator.of(context).pushReplacementNamed(AdminHomePage.routeName);
-    } else {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Invalid username or password.'),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () => Navigator.of(ctx).pop(),
-            ),
-          ],
-        ),
-      );
-    }
-  }
+  // void _login() {
+  //   if (_usernameController.text == 'admin' &&
+  //       _passwordController.text == 'admin') {
+  //     Navigator.of(context).pushReplacementNamed(AdminHomePage.routeName);
+  //   } else {
+  //     showDialog(
+  //       context: context,
+  //       builder: (ctx) => AlertDialog(
+  //         title: Text('Error'),
+  //         content: Text('Invalid username or password.'),
+  //         actions: [
+  //           TextButton(
+  //             child: Text('OK'),
+  //             onPressed: () => Navigator.of(ctx).pop(),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,20 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 16.0),
             ElevatedButton(
               child: Text('Login'),
-              onPressed: _login,
+              // onPressed: _login,
+              onPressed: ()async{
+                if(_usernameController.text == "" || _passwordController.text == ""){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("All feilds are required !"), backgroundColor: Colors.red,));
+                }
+                else{
+                  User? result = await AuthService().login(_usernameController.text,_passwordController.text,context);
+                  if(result !=null){
+                    print('Success');
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>AdminHomePage()), (route) => false);
+                    // print(result.email);
+                }
+                }
+              },
             ),
           ],
         ),
@@ -84,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
 // class HomePage extends StatelessWidget {
 //   static const routeName = '/home';
 //

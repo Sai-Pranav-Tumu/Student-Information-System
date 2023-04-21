@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 class AdminHomePage extends StatelessWidget {
   static const routeName = '/admin-home';
 
@@ -8,6 +10,17 @@ class AdminHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Home'),
+        centerTitle: true,
+        actions: [
+          TextButton.icon(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }, icon: Icon(Icons.logout), label: Text("Signout"),style: TextButton.styleFrom(
+            primary: Colors.white
+          ),)
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

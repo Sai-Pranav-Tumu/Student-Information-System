@@ -1,11 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:minor/services/auth_service.dart';
+import 'AdminHomePage.dart';
 import 'faculty_page.dart';
 import 'images_page.dart';
 import 'newsfeed_page.dart';
 import 'sidebar.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -15,7 +20,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My App',
-      home: HomePage(),
+      // home: HomePage(),
+      home: StreamBuilder(
+        stream: AuthService().firebaseAuth.authStateChanges(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return AdminHomePage();
+          }
+          return HomePage();
+        },
+      ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
