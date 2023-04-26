@@ -7,11 +7,15 @@ import 'images_page.dart';
 import 'newsfeed_page.dart';
 import 'sidebar.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'YOUR_RECAPTCHA_SITE_KEY',
+  );
 }
 
 class MyApp extends StatelessWidget {

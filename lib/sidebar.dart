@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:minor/adminlogin.dart';
+import 'Attendance.dart';
+import 'ebooks_veiw.dart';
+
 
 class sidebar extends StatefulWidget {
   const sidebar({Key? key}) : super(key: key);
@@ -18,6 +21,7 @@ class _sidebarState extends State<sidebar> {
             ListTile(
               leading: Icon(Icons.book),
               title: Text('Ebooks'),
+              onTap: () => selectedItem(context, 1),
             ),
             ListTile(
               leading: Icon(Icons.bookmark),
@@ -25,7 +29,8 @@ class _sidebarState extends State<sidebar> {
             ),
             ListTile(
               leading: Icon(Icons.web),
-              title: Text('Website'),
+              title: Text('Attendence'),
+              onTap: () => selectedItem(context, 2),
             ),
             ListTile(
               leading: Icon(Icons.rate_review),
@@ -56,6 +61,19 @@ class _sidebarState extends State<sidebar> {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => adminlogin()
         ));
+        break;
+      case 1:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ebooks_veiw()
+        ));
+        break;
+      case 2:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Attendance(),
+        ));
+        break;
+      default:
+        break;
     }
   }
 }

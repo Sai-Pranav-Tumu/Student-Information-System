@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
-import 'ebooks_home.dart';
-import 'main.dart';
 
-class AdminHomePage extends StatelessWidget {
-  static const routeName = '/admin-home';
+import 'ebooks.dart';
+import 'ebooks_veiw.dart';
 
+class ebooks_home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Home'),
-        centerTitle: true,
-        actions: [
-          TextButton.icon(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          }, icon: Icon(Icons.logout), label: Text("Signout"),style: TextButton.styleFrom(
-            primary: Colors.white
-          ),)
-        ],
+        title: Text('Home'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,69 +19,48 @@ class AdminHomePage extends StatelessWidget {
               child: Card(
                 child: InkWell(
                   onTap: () {
-                    // Navigate to event images screen
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.event,
-                        size: 80.0,
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        'Event Images',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Expanded(
-              child: Card(
-                child: InkWell(
-                  onTap: () {
-                    // Navigate to newsfeed screen
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.article,
-                        size: 80.0,
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        'Newsfeed',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Expanded(
-              child: Card(
-                child: InkWell(
-                  onTap: () {
-                    // Navigate to ebooks screen
+                    // Navigator.pushNamed(context, '/upload');
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ebooks_home()
+                        builder: (context) => UploadPage()
                     ));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.book,
+                        Icons.cloud_upload,
                         size: 80.0,
                       ),
                       SizedBox(height: 16.0),
                       Text(
-                        'Ebooks',
+                        'Upload',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Expanded(
+              child: Card(
+                child: InkWell(
+                  onTap: () {
+                    // Navigator.pushNamed(context, '/view');
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ebooks_veiw()
+                    ));
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.view_list,
+                        size: 80.0,
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        'View',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
@@ -107,4 +74,3 @@ class AdminHomePage extends StatelessWidget {
     );
   }
 }
-
