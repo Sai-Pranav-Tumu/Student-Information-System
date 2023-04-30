@@ -4,17 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ebooks_veiw extends StatelessWidget {
+class ebooks_veiw extends StatefulWidget {
+  const ebooks_veiw({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Firebase Storage Demo',
-      home: veiw(),
-    );
-  }
+  veiw createState() => veiw();
 }
 
-class veiw extends StatelessWidget {
+class veiw extends State<ebooks_veiw> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

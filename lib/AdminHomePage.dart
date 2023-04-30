@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:minor/services/auth_service.dart';
 import 'ebooks_home.dart';
 import 'main.dart';
 
@@ -12,17 +14,25 @@ class AdminHomePage extends StatelessWidget {
         title: Text('Admin Home'),
         centerTitle: true,
         actions: [
-          TextButton.icon(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          }, icon: Icon(Icons.logout), label: Text("Signout"),style: TextButton.styleFrom(
-            primary: Colors.white
-          ),)
+          TextButton.icon(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp())
+              );
+            },
+            icon: Icon(Icons.logout),
+            label: Text("Signout"),
+            style: TextButton.styleFrom(
+                primary: Colors.white
+            ),
+          ),
+
         ],
       ),
-      body: Padding(
+
+        body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

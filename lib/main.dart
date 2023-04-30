@@ -1,11 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:minor/rate_home.dart';
 import 'package:minor/services/auth_service.dart';
 import 'AdminHomePage.dart';
+import 'Attendance.dart';
+import 'adminlogin.dart';
+import 'courses.dart';
+import 'ebooks_veiw.dart';
 import 'faculty_page.dart';
 import 'images_page.dart';
 import 'newsfeed_page.dart';
-import 'sidebar.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 
@@ -34,12 +38,10 @@ class MyApp extends StatelessWidget {
           return HomePage();
         },
       ),
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        appBarTheme: AppBarTheme(
-          color: Colors.blue,
-        ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.blue[900],
+        accentColor: Colors.redAccent,
       ),
     );
   }
@@ -53,6 +55,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedPage =0;
+  bool _isDarkMode = false;
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
   final tabs = [
     Container(child:NewsfeedPage()),
     Container(child:FacultyPage()),
@@ -60,36 +68,121 @@ class _HomePageState extends State<HomePage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: sidebar(),
-      appBar: AppBar(
-        title: const Text('VNRVJIET'),
+    return MaterialApp(
+      theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      debugShowCheckedModeBanner: false,
+
+      home: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              ListTile(
+                leading: Icon(Icons.book),
+                title: Text('Ebooks'),
+                onTap: () => selectedItem(context, 1),
+              ),
+              ListTile(
+                leading: Icon(Icons.bookmark),
+                title: Text('Courses'),
+                onTap: () => selectedItem(context, 3),
+              ),
+              ListTile(
+                leading: Icon(Icons.web),
+                title: Text('Attendence'),
+                onTap: () => selectedItem(context, 2),
+                // child: Text('Go to vnrvjiet.ac.in'),
+              ),
+              ListTile(
+                leading: Icon(Icons.rate_review),
+                title: Text('Rate us'),
+                onTap: () => selectedItem(context, 4),
+              ),
+              ListTile(
+                leading: Icon(Icons.share),
+                title: Text('Share app'),
+              ),
+              ListTile(
+                leading: Icon(Icons.call_to_action),
+                title: Text('Themes'),
+                onTap: _toggleTheme,
+              ),
+              ListTile(
+                leading: Icon(Icons.account_circle),
+                title: Text('Admin'),
+                onTap: () => selectedItem(context,0),
+              ),
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          title: const Text('VNRVJIET'),
+        ),
+        body: tabs[selectedPage],
+        bottomNavigationBar: GNav(
+          gap: 6,
+          backgroundColor: Colors.blueGrey.shade800, // update background color
+          iconSize: 24,
+          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          duration: Duration(milliseconds: 800),
+          textStyle: TextStyle(fontSize: 16, color: Colors.white),
+          tabBackgroundColor: Theme.of(context).primaryColor, // use the primaryColor of the theme
+          activeColor: Colors.white,
+          color: Colors.white,
+          tabs: [
+            GButton(
+              icon: Icons.home,
+              text: 'Home',
+            ),
+            GButton(
+              icon: Icons.people,
+              text: 'Faculty',
+            ),
+            GButton(
+              icon: Icons.photo_album,
+              text: 'Gallery',
+            ),
+          ],
+          selectedIndex: selectedPage,
+          onTabChange: (index) {
+            setState(() {
+              selectedPage = index;
+            });
+          },
+        ),
+
       ),
-      body: tabs[selectedPage],
-      bottomNavigationBar: GNav(
-        gap: 6,
-        backgroundColor: Colors.blueGrey,
-        color: Colors.white,
-        activeColor: Colors.white,
-        tabBackgroundColor: Colors.blueGrey.shade800,
-        padding: const EdgeInsets.all(15),
-        tabs: [
-          GButton(icon: Icons.home,
-            text: 'News Feed',),
-          // GButton(icon: Icons.feed,
-          //   text: 'Feed',),
-          GButton(icon: Icons.face,
-            text: 'Faculty',),
-          GButton(icon: Icons.image,
-            text: 'Gallery',),
-        ],
-        selectedIndex: selectedPage,
-        onTabChange: (index){
-          setState(() {
-            selectedPage = index;
-          });
-        },
-      ),
+      // backgroundColor: Colors.blueGrey.shade800,
     );
+  }
+  void selectedItem(BuildContext context, int index) {
+    switch(index){
+      case 0:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => LoginPage()
+        ));
+        break;
+      case 1:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ebooks_veiw()
+        ));
+        break;
+      case 2:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Attendance(),
+        ));
+        break;
+      case 3:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => coursesPage(),
+        ));
+        break;
+      case 4:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => AboutUsPage(),
+        ));
+        break;
+      default:
+        break;
+    }
   }
 }

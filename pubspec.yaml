@@ -49,6 +49,7 @@ dependencies:
   permission_handler: ^8.2.2
   firebase_app_check: ^0.1.2+2
   dependency_validator: ^3.0.0
+  webview_flutter: ^2.8.0
 
 
 
