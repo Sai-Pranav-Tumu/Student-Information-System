@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:minor/rate_home.dart';
+import 'package:minor/rate1.dart';
 import 'package:minor/services/auth_service.dart';
 import 'AdminHomePage.dart';
 import 'Attendance.dart';
@@ -8,7 +8,7 @@ import 'adminlogin.dart';
 import 'courses.dart';
 import 'ebooks_veiw.dart';
 import 'faculty_page.dart';
-import 'images_page.dart';
+import 'images_v.dart';
 import 'newsfeed_page.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -22,6 +22,22 @@ void main() async{
   );
 }
 
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black, // background color of the splash screen
+      child: Center(
+        child: Image.asset(
+          'assets/playstore.png', // path to your logo image file
+          width: 200,
+          height: 200,
+        ),
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -29,13 +45,23 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My App',
       // home: HomePage(),
-      home: StreamBuilder(
-        stream: AuthService().firebaseAuth.authStateChanges(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            return AdminHomePage();
+      home: FutureBuilder(
+        // Replace the StreamBuilder with FutureBuilder
+        future: Future.delayed(Duration(seconds: 3)), // Wait for 3 seconds
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          } else {
+            return StreamBuilder(
+              stream: AuthService().firebaseAuth.authStateChanges(),
+              builder: (context,snapshot){
+                if(snapshot.hasData){
+                  return AdminHomePage();
+                }
+                return HomePage();
+              },
+            );
           }
-          return HomePage();
         },
       ),
       darkTheme: ThemeData(
@@ -46,6 +72,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -64,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   final tabs = [
     Container(child:NewsfeedPage()),
     Container(child:FacultyPage()),
-    Container(child:ImagesPage())
+    Container(child:ImagesView())
   ];
   @override
   Widget build(BuildContext context) {
@@ -96,10 +124,6 @@ class _HomePageState extends State<HomePage> {
                 leading: Icon(Icons.rate_review),
                 title: Text('Rate us'),
                 onTap: () => selectedItem(context, 4),
-              ),
-              ListTile(
-                leading: Icon(Icons.share),
-                title: Text('Share app'),
               ),
               ListTile(
                 leading: Icon(Icons.call_to_action),
@@ -178,7 +202,7 @@ class _HomePageState extends State<HomePage> {
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AboutUsPage(),
+          builder: (context) => rate(),
         ));
         break;
       default:

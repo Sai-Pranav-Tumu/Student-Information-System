@@ -3,28 +3,30 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 
-class UploadPage extends StatefulWidget {
+
+class UploadImages extends StatefulWidget {
   @override
-  Upload_Page createState() => Upload_Page();
+  uimages createState() => uimages();
 }
-class Upload_Page extends State<UploadPage> {
+
+class uimages extends State<UploadImages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ebooks'),
+        title: Text('Images'),
       ),
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildCard(context, 'SEM 1-1', '/Ebooks/SEM 1-1'),
-          _buildCard(context, 'SEM 1-2', '/Ebooks/SEM 1-2'),
-          _buildCard(context, 'SEM 2-1', '/Ebooks/SEM 2-1'),
-          _buildCard(context, 'SEM 2-2', '/Ebooks/SEM 2-2'),
-          _buildCard(context, 'SEM 3-1', '/Ebooks/SEM 3-1'),
-          _buildCard(context, 'SEM 3-2', '/Ebooks/SEM 3-2'),
-          _buildCard(context, 'SEM 4-1', '/Ebooks/SEM 4-1'),
-          _buildCard(context, 'SEM 4-2', '/Ebooks/SEM 4-2'),
+          _buildCard(context, 'Blood_donation_camps', '/Event_Image/Blood_donation_camps'),
+          _buildCard(context, 'Ecficio', '/Event_Image/Ecficio'),
+          _buildCard(context, 'Fest_full_of_rice', '/Event_Image/Fest_full_of_rice'),
+          _buildCard(context, 'Nss', '/Event_Image/Nss'),
+          _buildCard(context, 'Sintilationz', '/Event_Image/Sintilationz'),
+          _buildCard(context, 'Turing_hut', '/Event_Image/Turing_hut'),
+          _buildCard(context, 'VJTheatro', '/Event_Image/VJTheatro'),
+          _buildCard(context, 'convergence', '/Event_Image/convergence'),
         ],
       ),
     );
@@ -36,33 +38,32 @@ class Upload_Page extends State<UploadPage> {
         leading: Icon(Icons.file_upload),
         title: Text(title),
         onTap: () {
-          _uploadPDF(context, directory);
+          _uploadImage(context, directory);
         },
       ),
     );
   }
 
-  void _uploadPDF(BuildContext context, String directory) async {
+  void _uploadImage(BuildContext context, String directory) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
 
     if (result == null || result.files.isEmpty) return;
+
     PlatformFile file = result.files.first;
-    File pdfFile = File(file.path!);
+    File imageFile = File(file.path!);
 
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage.ref().child('$directory/${pdfFile.path
-        .split('/')
-        .last}');
-    UploadTask uploadTask = ref.putFile(pdfFile);
+    Reference ref = storage.ref().child('$directory/${imageFile.path.split('/').last}');
+    UploadTask uploadTask = ref.putFile(imageFile);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Uploading PDF'),
+          title: Text('Uploading Image'),
           content: StreamBuilder<TaskSnapshot>(
             stream: uploadTask.snapshotEvents,
             builder: (context, snapshot) {
@@ -89,7 +90,7 @@ class Upload_Page extends State<UploadPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Upload Successful'),
-            content: Text('Your PDF was uploaded to $directory.'),
+            content: Text('Your image was uploaded to $directory.'),
           );
         },
       );
@@ -100,7 +101,7 @@ class Upload_Page extends State<UploadPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Upload Failed'),
-            content: Text('An error occurred while uploading your PDF.'),
+            content: Text('An error occurred while uploading your image.'),
           );
         },
       );

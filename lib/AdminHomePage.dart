@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:minor/services/auth_service.dart';
 import 'ebooks_home.dart';
+import 'images_home.dart';
 import 'main.dart';
 
 class AdminHomePage extends StatelessWidget {
@@ -42,6 +42,9 @@ class AdminHomePage extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     // Navigate to event images screen
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => imghome()
+                    ));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

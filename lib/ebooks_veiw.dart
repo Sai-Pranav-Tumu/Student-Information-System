@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ebooks_veiw extends StatefulWidget {
   const ebooks_veiw({Key? key}) : super(key: key);
@@ -73,10 +74,90 @@ class veiw extends State<ebooks_veiw> {
   }
 }
 
+// class PdfScreen extends StatelessWidget {
+//   final List<Reference> pdfs;
+//
+//   const PdfScreen({Key? key, required this.pdfs}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('PDFs')),
+//       body: GridView.count(
+//         crossAxisCount: 2,
+//         padding: const EdgeInsets.all(16.0),
+//         childAspectRatio: 0.8,
+//         mainAxisSpacing: 16.0,
+//         crossAxisSpacing: 16.0,
+//         children: pdfs.map((pdf) {
+//           return Padding(
+//             padding: const EdgeInsets.all(8.0),
+//             child: Card(
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//               child: InkWell(
+//                 onTap: () async {
+//                   final url = await pdf.getDownloadURL();
+//                   final fileName = pdf.name;
+//                   await _downloadPdf(context, url, fileName);
+//                 },
+//                 child: Center(
+//                   child: Text(
+//                     pdf.name,
+//                     style: TextStyle(fontSize: 18.0),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           );
+//         }).toList(),
+//       ),
+//     );
+//   }
+//
+//
+//   Future<void> _downloadPdf(BuildContext context, String url,
+//       String fileName) async {
+//     final dir = await getApplicationDocumentsDirectory();
+//     final file = File('${dir.path}/$fileName');
+//     final request = await HttpClient().getUrl(Uri.parse(url));
+//     final response = await request.close();
+//     // await response.pipe(file.openWrite());
+//     await response.pipe(file.openWrite());
+//     print('File downloaded to ${file.path}');
+//
+//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//       content: Text('$fileName downloaded'),
+//     ));
+//   }
+// }
+
+
+
 class PdfScreen extends StatelessWidget {
   final List<Reference> pdfs;
 
   const PdfScreen({Key? key, required this.pdfs}) : super(key: key);
+
+  Future<void> _downloadPdf(BuildContext context, Reference ref) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${ref.name}');
+    await ref.writeToFile(file);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Downloaded ${ref.name}')),
+    );
+
+    // Open the PDF file in an external app
+    if (await canLaunch(file.path)) {
+      await launch(file.path, forceSafariVC: false);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch ${file.path}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +180,7 @@ class PdfScreen extends StatelessWidget {
                 onTap: () async {
                   final url = await pdf.getDownloadURL();
                   final fileName = pdf.name;
-                  await _downloadPdf(context, url, fileName);
+                  await _downloadPdf(context, pdf);
                 },
                 child: Center(
                   child: Text(
@@ -116,15 +197,4 @@ class PdfScreen extends StatelessWidget {
   }
 }
 
-Future<void> _downloadPdf(BuildContext context, String url, String fileName) async {
-  final dir = await getApplicationDocumentsDirectory();
-  final file = File('${dir.path}/$fileName');
-  final request = await HttpClient().getUrl(Uri.parse(url));
-  final response = await request.close();
-  await response.pipe(file.openWrite());
-
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text('$fileName downloaded'),
-  ));
-}
 

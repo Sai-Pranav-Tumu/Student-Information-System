@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'images_u.dart';
+import 'images_v.dart';
 
-import 'ebooks.dart';
-import 'ebooks_veiw.dart';
-
-class ebooks_home extends StatefulWidget {
+class imghome extends StatefulWidget {
   @override
-  ebookshome createState() => ebookshome();
+  images_home createState() => images_home();
 }
 
-class ebookshome extends State<ebooks_home> {
+class images_home extends State<imghome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,7 @@ class ebookshome extends State<ebooks_home> {
                   onTap: () {
                     // Navigator.pushNamed(context, '/upload');
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => UploadPage()
+                        builder: (context) => UploadImages()
                     ));
                   },
                   child: Column(
@@ -53,7 +52,7 @@ class ebookshome extends State<ebooks_home> {
                   onTap: () {
                     // Navigator.pushNamed(context, '/view');
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ebooks_veiw()
+                        builder: (context) => ImagesView()
                     ));
                   },
                   child: Column(
